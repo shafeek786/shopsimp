@@ -24,6 +24,7 @@ const addtoWallet = async(req,res)=>{
             update,
             { new: true }
         );
+        
             // Save the updated user document
            res.redirect('/myaccount')
     }catch(err){
