@@ -275,13 +275,14 @@ const loadLogin = async (req, res) => {
 };
 const verifyLogin = async (req, res) => {
   try {
-    const email = req.body.email;
-    const password = req.body.password;
-    console.log(password);
-    const userData = await User.findOne({ email: email });
+    const password = req.body.password
+    const email = req.body.email
+    const userData = await User.findOne({ email: email })
+
     if (userData) {
-      const passworfMatch = await argon2.verify(password, userData.password);
-      if (passworfMatch) {
+
+      var passwordMatch = await argon2.verify(userData.password, password);
+      if (passwordMatch) {
         if (userData.is_Admin === 0) {
           console.log("hiiii");
           res.render("login.hbs", { message: "You are not allowed" });
@@ -290,9 +291,9 @@ const verifyLogin = async (req, res) => {
           res.redirect("/admin");
         }
       } else {
-        res.render("login.hbs", { message: "login faile" });
+        res.render("login.hbs", { message: "login failed" });
       }
-    } else {
+    }else {
       res.render("login.hbs", { message: "login failed" });
     }
   } catch (error) {
