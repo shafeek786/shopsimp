@@ -9,6 +9,8 @@ const nodeMailer = require("nodemailer");
 const moment = require("moment");
 const mongoose = require("mongoose");
 const hbs = require("hbs");
+const argon2 = require('argon2');
+
 
 let userRegData;
 let count = 3;
@@ -278,7 +280,7 @@ const verifyLogin = async (req, res) => {
     console.log(password);
     const userData = await User.findOne({ email: email });
     if (userData) {
-      const passworfMatch = await bcrypt.compareSync(password, userData.password);
+      const passworfMatch = await argon2.verify(password, userData.password);
       if (passworfMatch) {
         if (userData.is_Admin === 0) {
           console.log("hiiii");
