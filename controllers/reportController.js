@@ -25,7 +25,7 @@ const postReport = async (req, res) => {
     try {
       const startDate = new Date(req.body.start); // Convert start date to a Date object
       const endDate = new Date(req.body.end);     // Convert end date to a Date object
-  
+  console.log("hiiii")
       // Check if start and end are valid date objects
       if (isNaN(startDate) || isNaN(endDate)) {
         return res.status(400).send("Invalid date format");
@@ -35,7 +35,7 @@ const postReport = async (req, res) => {
         date: {
           $gte: startDate,
           $lte: endDate
-        },status: { $in: ['pending', 'shipped', 'delivered'] }
+        },status: { $in: ['Pending', 'Shipped', 'Delivered'] }
       }).populate("address");
       // Use the $match stage to filter data between start and end dates
      // const dailyorders = await Order.aggregate([

@@ -8,7 +8,6 @@ const bcrypt = require('bcryptjs')
 const url = require('url')
 const nodeMailer = require("nodemailer");
 const argon2 = require('argon2');
-const user = require('../models/user')
 const session = require('express-session');
 require('dotenv').config()
 const moment = require("moment");
@@ -177,13 +176,10 @@ const loadVerifyLogin = async (req, res) => {
     const password = req.body.password
     const email = req.body.email
     const userData = await User.findOne({ email: email })
-
     if (userData) {
-
       var passwordMatch = await argon2.verify(userData.password, password);
       if (passwordMatch) {
         if (userData.is_blocked === true) {
-          console.log("blocked")
           res.render('login', { message: "You are Blocked" })
         }
         else {
@@ -192,9 +188,12 @@ const loadVerifyLogin = async (req, res) => {
         }
       }
       else {
-        console.log("not")
-        res.render('login', { message: "User ID not Exist" })
+        res.render('login', { message: "Invalid User ID or password" })
       }
+    }
+    else {
+      
+      res.render('login', { message: "User ID not exist" })
     }
   } catch (err) {
     console.log(err)
