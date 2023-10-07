@@ -192,7 +192,8 @@ const loadVerifyLogin = async (req, res) => {
         }
       }
       else {
-        res.render('login', { message: "Login failed" })
+        console.log("not")
+        res.render('login', { message: "User ID not Exist" })
       }
     }
   } catch (err) {
