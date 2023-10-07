@@ -192,7 +192,7 @@ const loadVerifyLogin = async (req, res) => {
         }
       }
       else {
-        res.render('login', { message: "Login failed" })
+        res.render('login', { message: "Login fail" })
       }
     }
   } catch (err) {
