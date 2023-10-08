@@ -13,7 +13,7 @@ const Razorpay = require('razorpay');
 
 const loadCheckout = async (req, res) => {
 
-  const user = req.session.userdata
+  const user = req.session.userData
   const userData = await User.findById({ _id: user._id })
   const userId = userData._id
 
@@ -28,10 +28,13 @@ const loadCheckout = async (req, res) => {
   })
 
   const now = new Date();
+
   const availableCoupons = await Coupon.find({
     expiryDate: { $gte: now },
-    usedBy: { $nin: [userId] }
+    usedBy: { $nin: [userId] },
+    forAll: 'Yes'
   });
+  
   console.log(availableCoupons, 'helooooooooooo coupon aaann');
 
   res.render('checkout', { userData, cart, addressData, subTotal, availableCoupons })
@@ -40,7 +43,7 @@ const loadCheckout = async (req, res) => {
 
 
 const checkStock = async (req, res) => {
-  const user = req.session.userdata
+  const user = req.session.userData
   const userData = await User.findById({ _id: user._id })
   const userId = userData._id;
 
@@ -66,7 +69,7 @@ const checkStock = async (req, res) => {
 
   console.log(stock, 'stockkkkkkkkkkkkkk');
 
-  if (stock.length >= 0) {
+  if (stock.length > 0) {
     console.log('Sending JSON response with stock array');
     res.status(200).json(stock);
   } else {

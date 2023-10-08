@@ -255,6 +255,7 @@ const loadProductDetails = async (req, res) => {
     
   } catch (err) {
     console.log(err)
+    res.render('error',{message:"Not found"})
   }
 }
 
@@ -458,71 +459,6 @@ const updateCart = async (req, res) => {
   }
 };
 
-const loadCheckout = async (req, res) => {
-
-  const user = req.session.userData
-  const userData = await User.findById({ _id: user._id })
-  const userId = userData._id
-
-  const addressData = await Address.find({ userId: userId })
-  const userDataa = await User.findOne({ _id: userId }).populate("cart.product").lean()
-  const cart = userDataa.cart
-
-  let subTotal = 0
-  cart.forEach((val) => {
-    val.total = val.product.price * val.quantity
-    subTotal += val.total
-  })
-
-  const now = new Date();
-  const availableCoupons = await Coupon.find({
-    expiryDate: { $gte: now },
-    usedBy: { $nin: [userId] }
-  });
-  console.log(availableCoupons, 'helooooooooooo coupon aaann');
-
-  res.render('checkout', { userData, cart, addressData, subTotal, availableCoupons })
-}
-
-const checkStock = async (req, res) => {
-  const user = req.session.userData
-  const userData = await User.findById({ _id: user._id })
-  const userId = userData._id;
-
-  const addressData = await Address.find({ userId: userId });
-
-  const userDataa = await User.findOne({ _id: userId }).populate("cart.product").lean();
-  const cart = userDataa.cart;
-
-  console.log(cart, 'cart 3777777777');
-
-  // let subTotal = 0;
-  // cart.forEach((val) => {
-  //   val.total = val.product.price * val.quantity;
-  //   subTotal += val.total;
-  // });
-
-  let stock = [];
-  cart.forEach((el) => {
-    if ((el.product.quantity - el.quantity) <= 0) {
-      stock.push(el.product);
-    }
-  });
-
-  console.log(stock, 'stockkkkkkkkkkkkkk');
-
-  if (stock.length > 0) {
-    console.log('Sending JSON response with stock array');
-    res.status(200).json(stock);
-  } else {
-    res.json('ok')
-  }
-  // else {
-  //   console.log('Rendering checkout page');
-  //   res.render('user/checkout/checkout', { userData, cart, addressData, subTotal });
-
-  // }
-};
 
 const placeOrder = async (req, res) => {
 
@@ -809,8 +745,6 @@ module.exports = {
   loadCart,
   removeCart,
   updateCart,
-  checkStock,
-  loadCheckout,
   placeOrder,
   loadProductList,
   productSerach,

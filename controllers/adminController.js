@@ -242,6 +242,7 @@ const loadDeleteUser = async (req, res) => {
 //Block User
 const blockUser = async (req, res) => {
   try {
+    req.session.destroy()
     const userData = await User.findOneAndUpdate(
       { _id: req.query.id },
       { $set: { is_blocked: true } }

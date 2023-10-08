@@ -46,7 +46,7 @@ const addCoupon = async (req, res) => {
 
 const addCouponPost = async (req, res) => {
     try {
-        const { code, percent, expDate,minPurchse,maxDiscount } = req.body;
+        const { code, percent, expDate,minPurchse,maxDiscount,forAll } = req.body;
         const cpnExist = await Coupon.findOne({ code: code });
         
     if (!cpnExist) {
@@ -55,6 +55,7 @@ const addCouponPost = async (req, res) => {
           discount: percent,
           minPurchase:minPurchse,
           maxDiscount:maxDiscount,
+          forAll:forAll,
           expiryDate: expDate,
         });
   

@@ -61,8 +61,8 @@ router.post('/cart_updation', auth.isLogin,  userController.updateCart)
 
 router.get('/product_list',auth.isLogin,uth.checkUserStatus,userController.loadProductList)
 
-router.get('/checkout', auth.isLogin,uth.checkUserStatus, userController.loadCheckout);
-router.get('/check_stock', auth.isLogin,uth.checkUserStatus, userController.checkStock);
+router.get('/checkout', auth.isLogin,uth.checkUserStatus, checkoutController.loadCheckout);
+router.get('/check_stock', auth.isLogin,uth.checkUserStatus, checkoutController.checkStock);
 router.post('/place_order', auth.isLogin,checkoutController.placeOrder);
 
 router.get("/add-checkoutaddress", auth.isLogin,uth.checkUserStatus,  profileController.addNewAddresss);
